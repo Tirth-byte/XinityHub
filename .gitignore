@@ -13,6 +13,8 @@ __pycache__/
 # Local Database
 database.db
 database.db-journal
+*.db
+
 
 # File Storage
 uploads/
