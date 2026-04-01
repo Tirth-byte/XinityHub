@@ -87,6 +87,13 @@ This application has been meticulously structurally optimized to be deployed ide
 
 ---
 
+## 🔒 Security Architecture
+
+> [!CAUTION]
+> **Extremely Important:** Never ever hardcode keys into your git repository! The AI framework is designed to detect your `GEMINI_API_KEY` through your active environment variables uniquely. Create a hidden `.env` file parallel to `.env.example` to boot the application securely.
+
+---
+
 ## 🔮 Future Improvements
 
 > [!WARNING]

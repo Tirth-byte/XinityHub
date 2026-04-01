@@ -24,7 +24,7 @@ def assistant():
         if not user_input:
             return jsonify({'error': 'Please provide a valid prompt.'}), 400
             
-        api_key = os.environ.get('GEMINI_API_KEY', 'REDACTED_API_KEY_SECURE')
+        api_key = os.environ.get('GEMINI_API_KEY')
         
         if not HAS_GENAI:
             return jsonify({'error': 'The google-generativeai package is missing from the virtual environment. Ensure dependencies are fully installed.'}), 500
