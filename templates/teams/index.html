@@ -1,0 +1,122 @@
+{% extends 'base.html' %}
+
+{% block title %}Teams - HackConnect{% endblock %}
+
+{% block content %}
+<section class="container fade-in-up" style="padding-top: 40px;">
+    <div class="section-header">
+        <h1 class="title">Team Management</h1>
+        <div class="glitch-line"></div>
+    </div>
+    
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <div class="flash-messages mb-4">
+          {% for category, message in messages %}
+            <div class="alert alert-{{ category }} glass-effect">{{ message }}</div>
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+
+    <div class="dashboard-grid" style="grid-template-columns: 1fr 2fr;">
+        <!-- Create Team Form -->
+        <div class="dashboard-col">
+            <div class="glass-effect slide-in-right p-4" style="border-radius: var(--border-radius); padding: 32px;">
+                <h2 class="form-title" style="font-size: 1.5rem; margin-bottom: 24px;">Create a Team</h2>
+                <form action="{{ url_for('teams.create_team') }}" method="post" class="custom-form">
+                    <div class="form-group">
+                        <label for="name">Team Name <span class="req">*</span></label>
+                        <input type="text" id="name" name="name" required class="glass-input" placeholder="e.g. Hackers United">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="description">Description (Optional)</label>
+                        <textarea id="description" name="description" rows="3" class="glass-input" placeholder="What is this team about?"></textarea>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary pulse-on-hover" style="width: 100%; justify-content: center;">Create Team</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- All Teams List -->
+        <div class="dashboard-col">
+            <div class="glass-effect slide-in-right delay-1 p-4" style="border-radius: var(--border-radius); padding: 32px;">
+                <h2 class="form-title" style="font-size: 1.5rem; margin-bottom: 24px;">Explore Teams</h2>
+                
+                <div class="projects-grid" style="grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px;">
+                    {% for team in teams %}
+                    <div class="team-card glass-effect" style="padding: 24px; border-radius: 12px; display: flex; flex-direction: column;">
+                        <h3 style="color: var(--primary-color); margin-bottom: 8px; font-size: 1.4rem;">{{ team.name }}</h3>
+                        <p style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: 16px; flex-grow: 1;">{{ team.description or 'No description provided.' }}</p>
+                        
+                        <div style="margin-bottom: 24px;">
+                            <strong style="font-size: 0.85rem; color: var(--text-main); text-transform: uppercase; letter-spacing: 0.5px;">Members:</strong>
+                            <div style="display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px;">
+                                {% if team.id in team_members %}
+                                    {% for member in team_members[team.id] %}
+                                        <span class="badge" style="background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.1); padding: 4px 10px; border-radius: 12px; font-size: 0.8rem;">
+                                            {{ member.username }}
+                                            {% if member.user_id == team.creator_id %}
+                                                <span style="color: var(--secondary-color); margin-left: 2px;">★</span>
+                                            {% endif %}
+                                        </span>
+                                    {% endfor %}
+                                {% else %}
+                                    <span style="font-size: 0.8rem; color: var(--text-muted);">No members yet</span>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        {% set ns = namespace(is_member=false) %}
+                        {% if team.id in team_members %}
+                            {% for member in team_members[team.id] %}
+                                {% if member.user_id == g.user['id'] %}
+                                    {% set ns.is_member = true %}
+                                {% endif %}
+                            {% endfor %}
+                        {% endif %}
+
+                        {% if ns.is_member %}
+                            <button class="btn btn-secondary btn-small" disabled style="opacity: 0.5; cursor: not-allowed; justify-content: center; width: 100%;">Joined</button>
+                        {% else %}
+                            <form action="{{ url_for('teams.join_team') }}" method="post" style="display: flex;">
+                                <input type="hidden" name="team_id" value="{{ team.id }}">
+                                <button type="submit" class="btn btn-primary btn-small" style="flex-grow: 1; justify-content: center; background: transparent; border: 1px solid var(--primary-color); color: var(--primary-color); box-shadow: none;">Join Team</button>
+                            </form>
+                        {% endif %}
+                    </div>
+                    {% else %}
+                    <p style="color: var(--text-muted);">No teams have been created yet. Be the first!</p>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+.dashboard-grid {
+    display: grid;
+    gap: 32px;
+}
+.dashboard-col {
+    display: flex;
+    flex-direction: column;
+}
+.team-card {
+    transition: var(--transition);
+}
+.team-card:hover {
+    border-color: rgba(69, 243, 255, 0.3) !important;
+    transform: translateY(-4px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+}
+@media (max-width: 900px) {
+    .dashboard-grid {
+        grid-template-columns: 1fr !important;
+    }
+}
+</style>
+{% endblock %}

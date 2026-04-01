@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+
+{% block title %}Global Chat - HackConnect{% endblock %}
+
+{% block content %}
+<section class="container fade-in-up" style="padding-top: 20px; max-width: 800px; margin: 0 auto; display: flex; flex-direction: column; height: 80vh;">
+    
+    <div class="section-header" style="margin-bottom: 20px;">
+        <h1 class="title" style="font-size: 1.8rem;">Global Chat</h1>
+        <div class="glitch-line"></div>
+    </div>
+    
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <div class="flash-messages mb-3">
+          {% for category, message in messages %}
+            <div class="alert alert-{{ category }} glass-effect" style="padding: 10px; margin-bottom:0;">{{ message }}</div>
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+
+    <!-- Chat Messages Window -->
+    <div class="chat-window shadow-effect" style="flex-grow: 1; overflow-y: auto; padding: 24px; border-radius: 12px 12px 0 0; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.05); border-bottom: none;">
+        {% for msg in messages %}
+            {% if msg.user_id == g.user['id'] %}
+                <!-- Own Message -->
+                <div class="message-bubble self mb-3" style="display: flex; flex-direction: column; align-items: flex-end;">
+                    <div style="max-width: 70%; background: var(--primary-dim); color: white; padding: 12px 16px; border-radius: 16px 16px 0 16px; box-shadow: 0 4px 15px rgba(69, 243, 255, 0.1);">
+                        <p style="margin: 0; font-size: 0.95rem;">{{ msg.content }}</p>
+                    </div>
+                    <small style="color: var(--text-muted); font-size: 0.75rem; margin-top: 4px;">{{ msg.timestamp[11:16] }}</small>
+                </div>
+            {% else %}
+                <!-- Other Message -->
+                <div class="message-bubble other mb-3" style="display: flex; flex-direction: column; align-items: flex-start;">
+                    <small style="color: var(--primary-color); font-weight: 600; font-size: 0.82rem; margin-bottom: 4px; margin-left: 4px; text-transform: capitalize;">{{ msg.username }}</small>
+                    <div style="max-width: 70%; background: var(--surface-bright); color: var(--text-main); padding: 12px 16px; border-radius: 16px 16px 16px 0;">
+                        <p style="margin: 0; font-size: 0.95rem;">{{ msg.content }}</p>
+                    </div>
+                    <small style="color: var(--text-muted); font-size: 0.75rem; margin-top: 4px; margin-left: 4px;">{{ msg.timestamp[11:16] }}</small>
+                </div>
+            {% endif %}
+        {% else %}
+            <div class="text-center" style="color: var(--text-muted); padding-top: 40px; opacity: 0.6;">
+                <p style="font-size: 1.1rem;">Welcome to the global HackConnect chat! Be the first to say hi.</p>
+            </div>
+        {% endfor %}
+    </div>
+
+    <!-- Message Input Form -->
+    <div class="chat-input-area glass-effect" style="padding: 16px; border-radius: 0 0 12px 12px; border-top: 1px solid rgba(255,255,255,0.1);">
+        <form action="{{ url_for('chat.send_message') }}" method="post" style="display: flex; gap: 12px;">
+            <input type="text" name="content" autocomplete="off" placeholder="Type a message..." required class="glass-input" style="flex-grow: 1; margin: 0; border-radius: 20px; padding: 12px 20px; background: rgba(0,0,0,0.5);">
+            <button type="submit" class="btn btn-primary" style="border-radius: 20px; padding: 0 24px;">Send</button>
+        </form>
+    </div>
+</section>
+
+<script>
+    // Automatically force scroll snap to the absolute bottom of the chat pane identically simulating a real-time log
+    const chatWindow = document.querySelector('.chat-window');
+    if (chatWindow) {
+        chatWindow.scrollTop = chatWindow.scrollHeight;
+    }
+</script>
+{% endblock %}

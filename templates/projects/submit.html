@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+
+{% block title %}Submit Project - HackConnect{% endblock %}
+
+{% block content %}
+<section class="container fade-in-up" style="padding-top: 40px; max-width: 800px; margin: 0 auto;">
+    <div class="section-header text-center">
+        <h1 class="title">Submit Project</h1>
+        <p style="color: var(--text-muted); margin-top: 10px;">Upload your hackathon build (PDF or ZIP only).</p>
+        <div class="glitch-line"></div>
+    </div>
+    
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <div class="flash-messages mb-4">
+          {% for category, message in messages %}
+            <div class="alert alert-{{ category }} glass-effect">{{ message }}</div>
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+
+    <div class="glass-effect slide-in-up" style="border-radius: var(--border-radius); padding: 40px;">
+        <form action="{{ url_for('projects.submit_project') }}" method="post" enctype="multipart/form-data" class="custom-form">
+            <div class="form-group mb-4">
+                <label for="title">Project Title <span class="req">*</span></label>
+                <input type="text" id="title" name="title" required class="glass-input" placeholder="e.g. NextGen AI Platform">
+            </div>
+
+            <div class="form-group mb-4">
+                <label for="team_id">Select Team <span class="req">*</span></label>
+                <select id="team_id" name="team_id" required class="glass-input" style="background-color: var(--surface-bright); color: white;">
+                    <option value="" disabled selected>-- Choose your team --</option>
+                    {% for team in user_teams %}
+                        <option value="{{ team.id }}">{{ team.name }}</option>
+                    {% endfor %}
+                </select>
+                <small style="color: var(--text-muted); display: block; margin-top: 6px;">
+                    Only teams you are currently a member of will appear here.
+                </small>
+            </div>
+            
+            <div class="form-group mb-4">
+                <label for="description">Detailed Description <span class="req">*</span></label>
+                <textarea id="description" name="description" rows="5" required class="glass-input" placeholder="Describe the stack, features, and journey of your project..."></textarea>
+            </div>
+
+            <div class="form-group mb-5">
+                <label for="file">Project Assets (PDF or ZIP)<span class="req">*</span></label>
+                <div class="file-upload-wrapper glass-input" style="padding: 24px; text-align: center; border: 2px dashed rgba(255,255,255,0.2);">
+                    <input type="file" id="file" name="file" accept=".pdf,.zip" required style="width: 100%;">
+                    <p style="color: var(--text-muted); font-size: 0.85rem; margin-top: 10px;">Max file size: 16MB. Ensure sensitive keys are removed!</p>
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary pulse-on-hover" style="width: 100%; justify-content: center; font-size: 1.1rem; padding: 16px;">Publish Project</button>
+        </form>
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+
+{% block title %}Sign Up - HackConnect{% endblock %}
+
+{% block content %}
+<section class="submit-section container fade-in-up">
+    <div class="form-container glass-effect" style="max-width: 450px;">
+        <h1 class="gradient-text form-title">Create Account</h1>
+        <p class="form-subtitle">Join the HackConnect community to share your projects.</p>
+        
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+            <div class="flash-messages mb-4">
+              {% for category, message in messages %}
+                <div class="alert alert-{{ category }} glass-effect">{{ message }}</div>
+              {% endfor %}
+            </div>
+          {% endif %}
+        {% endwith %}
+
+        <form action="/signup" method="POST" class="custom-form">
+            <div class="form-group slide-in-right">
+                <label for="username">Username</label>
+                <input type="text" id="username" name="username" required class="glass-input" placeholder="Unique username">
+            </div>
+            
+            <div class="form-group slide-in-right delay-1">
+                <label for="email">Email Address</label>
+                <input type="email" id="email" name="email" required class="glass-input" placeholder="you@example.com">
+            </div>
+
+            <div class="form-group slide-in-right delay-2">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" required class="glass-input" placeholder="••••••••">
+            </div>
+
+            <button type="submit" class="btn btn-primary submit-btn slide-in-right delay-3">
+                <span>Sign Up</span>
+            </button>
+        </form>
+        <div class="mt-4 text-center fade-in-up delay-4" style="margin-top: 24px; text-align: center; color: var(--text-muted);">
+            Already have an account? <a href="{{ url_for('auth.login') }}" class="highlight">Log in here</a>.
+        </div>
+    </div>
+</section>
+{% endblock %}

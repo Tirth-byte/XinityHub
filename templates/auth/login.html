@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block title %}Log In - HackConnect{% endblock %}
+
+{% block content %}
+<section class="submit-section container fade-in-up">
+    <div class="form-container glass-effect" style="max-width: 450px;">
+        <h1 class="gradient-text form-title">Welcome Back</h1>
+        <p class="form-subtitle">Log in to your HackConnect account.</p>
+        
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+            <div class="flash-messages mb-4">
+              {% for category, message in messages %}
+                <div class="alert alert-{{ category }} glass-effect">{{ message }}</div>
+              {% endfor %}
+            </div>
+          {% endif %}
+        {% endwith %}
+
+        <form action="/login" method="POST" class="custom-form">
+            <div class="form-group slide-in-right">
+                <label for="username">Username</label>
+                <input type="text" id="username" name="username" required class="glass-input" placeholder="Your username">
+            </div>
+            
+            <div class="form-group slide-in-right delay-1">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" required class="glass-input" placeholder="••••••••">
+            </div>
+
+            <button type="submit" class="btn btn-primary submit-btn slide-in-right delay-2">
+                <span>Log In</span>
+            </button>
+        </form>
+        <div class="mt-4 text-center fade-in-up delay-3" style="margin-top: 24px; text-align: center; color: var(--text-muted);">
+            Don't have an account? <a href="{{ url_for('auth.signup') }}" class="highlight">Sign up here</a>.
+        </div>
+    </div>
+</section>
+{% endblock %}

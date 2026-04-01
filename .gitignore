@@ -1,0 +1,25 @@
+# Virtual Environments
+.venv/
+venv/
+env/
+
+# Python Cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+
+# Local Database
+database.db
+database.db-journal
+
+# File Storage
+uploads/
+*~
+
+# Operating System Files
+.DS_Store
+
+# Environment Variables
+.env

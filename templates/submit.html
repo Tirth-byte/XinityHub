@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+
+{% block title %}Submit Project - HackConnect{% endblock %}
+
+{% block content %}
+<section class="submit-section container fade-in-up">
+    <div class="form-container glass-effect">
+        <h1 class="gradient-text form-title">Submit Your Project</h1>
+        <p class="form-subtitle">Share your hackathon creation with the community.</p>
+        
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+            <div class="flash-messages mb-4">
+              {% for category, message in messages %}
+                <div class="alert alert-{{ category }} glass-effect">{{ message }}</div>
+              {% endfor %}
+            </div>
+          {% endif %}
+        {% endwith %}
+
+        <form action="{{ url_for('submit') }}" method="post" enctype="multipart/form-data" class="custom-form" id="submitForm">
+            <div class="form-group slide-in-right">
+                <label for="title">Project Title <span class="req">*</span></label>
+                <input type="text" id="title" name="title" required placeholder="e.g. NextGen AI Bot" class="glass-input">
+            </div>
+
+            <div class="form-group slide-in-right delay-2">
+                <label for="hackathon_name">Hackathon Event Name <span class="req">*</span></label>
+                <input type="text" id="hackathon_name" name="hackathon_name" required placeholder="e.g. Global Hack 2026" class="glass-input">
+            </div>
+            
+            <div class="form-group slide-in-right delay-3">
+                <label for="description">Project Description <span class="req">*</span></label>
+                <textarea id="description" name="description" rows="5" required placeholder="What does your project do? How did you build it?" class="glass-input"></textarea>
+            </div>
+            
+            <div class="form-group slide-in-right delay-4">
+                <label for="image">Project Showcase Image (Optional)</label>
+                <div class="file-drop-area glass-input" id="fileDropArea">
+                    <span class="file-msg">Drag & drop or click to choose an image</span>
+                    <input type="file" id="image" name="image" accept="image/*" class="file-input">
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary submit-btn slide-in-right delay-5">
+                <span class="submit-text">Publish Project</span>
+                <span class="submit-icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M5 12H19M19 12L12 5M19 12L12 19" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </span>
+            </button>
+        </form>
+    </div>
+</section>
+{% endblock %}

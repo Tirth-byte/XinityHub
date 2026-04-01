@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+
+{% block title %}Dashboard - HackConnect{% endblock %}
+
+{% block content %}
+<section class="container fade-in-up" style="padding-top: 40px;">
+    <div class="section-header">
+        <h1 class="title">My Dashboard</h1>
+        <div class="glitch-line"></div>
+    </div>
+
+    <div class="dashboard-grid">
+        <!-- Announcements Column -->
+        <div class="dashboard-col">
+            <h2 class="form-title" style="font-size: 1.8rem; margin-bottom: 24px;">Latest Announcements</h2>
+            {% for ann in announcements %}
+            <div class="alert glass-effect mb-4 slide-in-right delay-1" style="border-left-color: var(--primary-color);">
+                <h4 style="color: var(--primary-color); margin-bottom: 8px;">{{ ann.title }}</h4>
+                <p style="color: var(--text-main); font-size: 0.95rem; line-height: 1.5; margin-bottom: 12px;">{{ ann.content }}</p>
+                <small style="color: rgba(255,255,255,0.4); font-size: 0.8rem;">{{ ann.created_at[:10] }}</small>
+            </div>
+            {% else %}
+            <div class="empty-state glass-effect slide-in-right delay-1" style="padding: 30px;">
+                <p style="color: var(--text-muted);">No new announcements to display right now.</p>
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- User Info & Teams Column -->
+        <div class="dashboard-col">
+            <!-- Profile Card -->
+            <div class="glass-effect slide-in-right delay-2" style="border-radius: var(--border-radius); padding: 32px; margin-bottom: 24px;">
+                <h2 class="form-title" style="font-size: 1.5rem; margin-bottom: 16px;">Profile</h2>
+                <p style="margin-bottom: 8px;"><strong>Username:</strong> <span class="highlight">{{ g.user['username'] }}</span></p>
+                <p><strong>Email Address:</strong> <span class="highlight">{{ g.user['email'] }}</span></p>
+            </div>
+
+            <!-- Teams Card -->
+            <div class="glass-effect slide-in-right delay-3" style="border-radius: var(--border-radius); padding: 32px;">
+                <h2 class="form-title" style="font-size: 1.5rem; margin-bottom: 20px;">My Teams</h2>
+                
+                <div class="teams-list">
+                    {% for team in teams %}
+                    <div class="team-card" style="padding: 16px; background: rgba(0,0,0,0.3); border-left: 2px solid var(--secondary-color); border-radius: 8px; margin-bottom: 16px; transition: var(--transition);">
+                        <h4 style="margin-bottom: 6px; color: var(--text-main);">{{ team.name }}</h4>
+                        <p style="color: var(--text-muted); font-size: 0.9rem;">{{ team.description or 'No description provided.' }}</p>
+                    </div>
+                    {% else %}
+                    <p style="color: var(--text-muted);">You are not actively part of any teams.</p>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: 1.6fr 1fr;
+    gap: 40px;
+    margin-top: 32px;
+}
+.dashboard-col {
+    display: flex;
+    flex-direction: column;
+}
+.team-card:hover {
+    background: rgba(255, 42, 133, 0.05) !important;
+    border-color: var(--primary-color) !important;
+}
+@media (max-width: 900px) {
+    .dashboard-grid {
+        grid-template-columns: 1fr;
+    }
+}
+</style>
+{% endblock %}

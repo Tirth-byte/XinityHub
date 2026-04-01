@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="HackConnect - A Community Platform for Hackathon Projects">
+    <title>{% block title %}Hackathon Community{% endblock %}</title>
+    <!-- CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
+</head>
+<body class="dark-theme">
+    <!-- Navbar -->
+    <nav class="navbar glass-effect">
+        <div class="container nav-container">
+            <a href="{{ url_for('index') }}" class="logo">
+                <span class="gradient-text">&lt;Hack</span>Connect/&gt;
+            </a>
+            <ul class="nav-links">
+                <li><a href="{{ url_for('projects.index') }}" class="{% if active_page == 'projects' %}active{% endif %}">Projects</a></li>
+                {% if g.user %}
+                <li><a href="{{ url_for('dashboard') }}" class="{% if active_page == 'dashboard' %}active{% endif %}">Dashboard</a></li>
+                <li><a href="{{ url_for('teams.index') }}" class="{% if active_page == 'teams' %}active{% endif %}">Teams</a></li>
+                <li><a href="{{ url_for('chat.index') }}" class="{% if active_page == 'chat' %}active{% endif %}">Chat</a></li>
+                <li><a href="{{ url_for('announcements.index') }}" class="{% if active_page == 'announcements' %}active{% endif %}">News</a></li>
+                <li><a href="{{ url_for('ai.assistant') }}" class="{% if active_page == 'ai' %}active{% endif %}" style="color: var(--primary-color); text-shadow: 0 0 10px rgba(69, 243, 255, 0.4); font-weight: 600;">AI Assistant</a></li>
+                <li><span class="text-muted" style="color: var(--text-muted); font-weight: 500;">Hi, {{ g.user['username'] }}</span></li>
+                <li><a href="{{ url_for('auth.logout') }}" class="btn btn-secondary btn-small">Logout</a></li>
+                {% else %}
+                <li><a href="{{ url_for('auth.login') }}" class="{% if active_page == 'login' %}active{% endif %}">Log In</a></li>
+                <li><a href="{{ url_for('auth.signup') }}" class="{% if active_page == 'signup' %}active{% endif %}">Sign Up</a></li>
+                {% endif %}
+                <li><a href="{{ url_for('projects.submit_project') }}" class="btn btn-primary pulse-on-hover">Submit Project</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer glass-effect">
+        <div class="container footer-content">
+            <p>&copy; 2026 HackConnect. Built for Hackathons.</p>
+        </div>
+    </footer>
+
+    <!-- JS -->
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>

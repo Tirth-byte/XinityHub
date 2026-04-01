@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<section class="hero-section text-center">
+    <div class="container">
+        <h1 class="hero-title fade-in-up">Discover <span class="gradient-text">Incredible</span> Hacks</h1>
+        <p class="hero-subtitle fade-in-up delay-1">Explore top projects built by developers around the world, or showcase your own creation.</p>
+        
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+            <div class="flash-messages fade-in-up delay-2">
+              {% for category, message in messages %}
+                <div class="alert alert-{{ category }} glass-effect">{{ message }}</div>
+              {% endfor %}
+            </div>
+          {% endif %}
+        {% endwith %}
+    </div>
+</section>
+
+<section class="projects-section" id="projects">
+    <div class="container">
+        <div class="section-header">
+            <h2 class="title">Latest Projects</h2>
+            <div class="glitch-line"></div>
+        </div>
+
+        <div class="projects-grid">
+            {% for project in projects %}
+            <article class="project-card glass-effect staggered-fade-in" id="project-{{ project.id }}">
+                <div class="card-image-wrapper">
+                    {% if project.file_path %}
+                        <img src="{{ url_for('download_file', name=project.file_path) }}" alt="{{ project.title }}" class="card-image" loading="lazy">
+                    {% else %}
+                        <div class="placeholder-image gradient-bg">
+                            <span>No Image</span>
+                        </div>
+                    {% endif %}
+                    <div class="card-badge">{{ project.team_name }}</div>
+                </div>
+                <div class="card-content">
+                    <h3 class="card-title">{{ project.title }}</h3>
+                    <p class="card-author">By <span class="highlight">{{ project.author }}</span></p>
+                    <p class="card-desc">{{ project.description[:120] }}{% if project.description|length > 120 %}...{% endif %}</p>
+                </div>
+                <div class="card-footer">
+                    <span class="date">New Project</span>
+                    <button class="btn btn-secondary btn-small view-details-btn">View Details</button>
+                </div>
+            </article>
+            {% else %}
+            <div class="empty-state glass-effect fade-in-up">
+                <p>No projects have been submitted yet. Be the first!</p>
+                <a href="{{ url_for('submit') }}" class="btn btn-primary mt-4">Submit Now</a>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endblock %}
